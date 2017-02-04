@@ -13,45 +13,65 @@
 // Hint: you may find it helpful to read up on and use the following 
 // jQuery methods: .submit(), preventDefault(), toggleClass(), and closest().
 
-var state = {
-    items: ["apples", "oranges", "milk", "bread"],
-};
+$(function() {
+	var state = [];
 
-var addItem = function(state, item) {
-	state.items.push(item);
-};
+	var addItem = function(state, item) {
+		state.push({
+			displayName: item,
+			checked: false
+		});
+		console.log(state[1]);
+	};
 
-var renderList = function(state, element) {
-	var itemsHTML = state.items.map(function(item) {
-		return '<li>' +
-		'<span class="shopping-item">' + item +
-		'</span><div class="shopping-item-controls">' +
-		'<button class="shopping-item-toggle">' +
-		'<span class="button-label">check</span>' +
-		'</button><button class="shopping-item-delete">' +
-		'<span class="button-label">delete</span>' +
-		'</button></div>'
-		'</li>';
+	var renderList = function(state, element) {
+		var itemsHTML = state.map(function(item) {
+			return '<li>' +
+			'<span class="shopping-item">' + item +
+			'</span><div class="shopping-item-controls">' +
+			'<button class="shopping-item-toggle">' +
+			'<span class="button-label">check</span>' +
+			'</button><button class="shopping-item-delete">' +
+			'<span class="button-label">delete</span>' +
+			'</button></div>'
+			'</li>';
+		});
+		element.html(itemsHTML);
+	}
+
+	// event listeners
+
+	$("#js-shopping-list-form").submit(function(event) {
+		event.preventDefault();
+		addItem(state, $("#shopping-list-entry").val());
+		renderList(state,$(".shopping-list"));
+	})
+
+	$(".shopping-list").on("click", ".shopping-item-toggle", function(event) {
+		console.log(event.target);
+		$(".shopping-item").closest("span").toggleClass("shopping-item__checked");
 	});
-	element.html(itemsHTML);
-}
 
-// event listeners
+	$(".shopping-list").on("click", ".shopping-item-delete", function(event) {
+		$(".shopping-item").closest("li").remove();
+	});	
 
-$("#js-shopping-list-form").submit(function(event) {
-	event.preventDefault();
-	addItem(state, $("#shopping-list-entry").val());
+	addItem(state, 'broccoli');
 	renderList(state,$(".shopping-list"));
 })
 
-$(".shopping-item-toggle").click(function(event) {
-	event.preventDefault();
-	$(".shopping-item-toggle span:first").toggleClass("shopping-item__checked");
-	renderList(state, $(".shopping-list"));
-});
+// make shopping list work
+// change data structure for quiz app and make it work
+// google "localStorage" to store state of shopping list
+// next unit on APIs
 
-$(".shopping-item-delete").click(function(event) {
-	event.preventDefault();
-	$(".this").closest("li").remove();
-})
+
+//To Do
+//move last two functions inside addItem, then fix it
+//use .on()
+//instead of a list of strings for items, do a list of objects, like items = {name: 'apple', checked: 'false'}
+//items will be an array of objects
+
+//look at vue.js (will have to use node)
+//angular version 1
 
