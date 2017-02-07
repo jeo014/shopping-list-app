@@ -21,21 +21,26 @@ $(function() {
 			displayName: item,
 			checked: false
 		});
-		console.log(state[1]);
+	return(state);
 	};
 
+	console.log(addItem(state, bananas))
+
 	var renderList = function(state, element) {
-		var itemsHTML = state.map(function(item) {
-			return '<li>' +
-			'<span class="shopping-item">' + item +
-			'</span><div class="shopping-item-controls">' +
-			'<button class="shopping-item-toggle">' +
-			'<span class="button-label">check</span>' +
-			'</button><button class="shopping-item-delete">' +
-			'<span class="button-label">delete</span>' +
-			'</button></div>'
-			'</li>';
-		});
+		var itemsHTML = function(){
+			for (var i=0; i < state.length; i++) {
+				var currentItemName = state[i].displayName;
+				return '<li><span class="shopping-item">' + 
+				currentItemName +
+				'</span><div class="shopping-item-controls">' +
+				'<button class="shopping-item-toggle">' +
+				'<span class="button-label">check</span>' +
+				'</button><button class="shopping-item-delete">' +
+				'<span class="button-label">delete</span>' +
+				'</button></div>'
+				'</li>';
+			};
+		};
 		element.html(itemsHTML);
 	}
 
@@ -44,7 +49,7 @@ $(function() {
 	$("#js-shopping-list-form").submit(function(event) {
 		event.preventDefault();
 		addItem(state, $("#shopping-list-entry").val());
-		renderList(state,$(".shopping-list"));
+		renderList(state, $(".shopping-list"));
 	})
 
 	$(".shopping-list").on("click", ".shopping-item-toggle", function(event) {
@@ -55,9 +60,6 @@ $(function() {
 	$(".shopping-list").on("click", ".shopping-item-delete", function(event) {
 		$(".shopping-item").closest("li").remove();
 	});	
-
-	addItem(state, 'broccoli');
-	renderList(state,$(".shopping-list"));
 })
 
 // make shopping list work
